@@ -57,40 +57,58 @@ class Main {
 		ResultSetMetaData meta = rs.getMetaData();
 		int columnCount = meta.getColumnCount();
 
-		// Print header
+		// extract headers
+		String[] headers = new String[columnCount];
 		for (int i = 1; i <= columnCount; i++) {
-			System.out.print(meta.getColumnLabel(i));
-			if (i < columnCount)
-				System.out.print(" | ");
+			headers[i - 1] = meta.getColumnLabel(i);
 		}
-		System.out.println();
 
-		// Print separator
-		for (int i = 1; i <= columnCount; i++) {
-			for (int j = 0; j < meta.getColumnLabel(i).length(); j++) {
-				System.out.print("-");
-			}
-			if (i < columnCount)
-				System.out.print("-+-");
+		// compute column widths
+		int[] colWidths = new int[columnCount];
+		for (int i = 0; i < columnCount; i++) {
+			colWidths[i] = headers[i].length();
 		}
-		System.out.println();
 
-		int rowCount = 0;
+		rs.beforeFirst();
 		while (rs.next()) {
-			rowCount++;
 			for (int i = 1; i <= columnCount; i++) {
-				Object val = rs.getObject(i);
-				System.out.print(val == null ? "NULL" : val.toString());
-				if (i < columnCount)
-					System.out.print(" | ");
+				String value = rs.getString(i);
+				if (value != null) {
+					colWidths[i - 1] = Math.max(colWidths[i - 1], value.length());
+				}
 			}
-			System.out.println();
 		}
 
-		if (rowCount == 0) {
-			System.out.println("(no rows)");
-		} else {
-			System.out.println(rowCount + " row(s).");
+		// build format string
+		StringBuilder formatBuilder = new StringBuilder("| ");
+		for (int i = 0; i < columnCount; i++) {
+			formatBuilder.append("%-").append(colWidths[i]).append("s");
+			if (i < columnCount - 1)
+				formatBuilder.append(" | ");
+			else
+				formatBuilder.append(" |");
+		}
+		String formatStr = formatBuilder.toString();
+
+		// print header
+		System.out.println(String.format(formatStr, (Object[]) headers));
+
+		// print separator
+		StringBuilder sep = new StringBuilder("|");
+		for (int w : colWidths) {
+			sep.append("-".repeat(w + 2)).append("|");
+		}
+		System.out.println(sep);
+
+		// print rows
+		rs.beforeFirst();
+		while (rs.next()) {
+			Object[] row = new Object[columnCount];
+			for (int i = 1; i <= columnCount; i++) {
+				row[i - 1] = rs.getString(i);
+			}
+			System.out.println(String.format(formatStr, row));
 		}
 	}
+
 }
