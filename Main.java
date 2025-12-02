@@ -1,4 +1,3 @@
-package src;// src.Main.java
 // CS157A Final Project
 
 import java.io.FileInputStream;
@@ -99,7 +98,7 @@ public class Main {
 
     private static void listCustomers(Connection conn) {
         String sql = "SELECT MembershipID, Name, DateOfBirth, Email, Phone " +
-                "FROM Customer ORDER BY MembershipID";
+        "FROM Customer ORDER BY MembershipID";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             printResultSet(rs);
