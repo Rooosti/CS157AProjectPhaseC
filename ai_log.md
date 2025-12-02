@@ -1,0 +1,3 @@
+- Asked AI for helper method help...
+- Best practices for the project
+- Helped with result set formatter
