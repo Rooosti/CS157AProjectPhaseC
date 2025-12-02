@@ -6,7 +6,7 @@ DROP DATABASE IF EXISTS cs157a_warehouse;
 CREATE DATABASE cs157a_warehouse;
 USE cs157a_warehouse;
 
--- Drop in dependency order if the DB already exists
+-- if exists...
 DROP TRIGGER IF EXISTS update_stock_after_purchase;
 
 DROP VIEW IF EXISTS CustomerPurchaseSummary;
@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS WarehouseItem;
 DROP TABLE IF EXISTS Warehouse;
 
--- 2. Table definitions -------------------------------------------------------
+-- 2. Table definitions -----------------------------------------
 
 -- Warehouse
 CREATE TABLE Warehouse (
@@ -88,12 +88,12 @@ CREATE TABLE Manages (
     FOREIGN KEY (ItemID)      REFERENCES WarehouseItem(ItemID)
 );
 
--- 3. Indexes -----------------------------------------------------------------
+-- 3. Indexes -----------------------------------------------------------
 
 -- Index on Employee for fast lookup by (Name, Role)
 CREATE INDEX emp_idx ON Employee (Name, Role);
 
--- 4. Trigger (from Phase B) ---------------------------------------------------
+-- 4. Trigger (from Phase B) -----------------------------------------------
 
 DELIMITER //
 CREATE TRIGGER update_stock_after_purchase
@@ -108,7 +108,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- 5. View (Phase C Part 6) ----------------------------------------------------
+-- 5. View (Phase C Part 6 -------------------------------------------------
 
 -- Shows each customer, how many transactions they have, and total spent.
 CREATE OR REPLACE VIEW CustomerPurchaseSummary AS
@@ -121,7 +121,7 @@ FROM Customer c
          LEFT JOIN Purchases p ON c.MembershipID = p.MembershipID
 GROUP BY c.MembershipID, c.Name;
 
--- 6. Stored Procedure (Phase C Part 6) ---------------------------------------
+-- 6. Stored Procedure (Phase C Part 6) -------------------------------------
 
 DELIMITER //
 CREATE PROCEDURE AddNewCustomer(
@@ -137,9 +137,9 @@ VALUES (p_MembershipID, p_Name, p_DateOfBirth, p_Email, p_Phone);
 END//
 DELIMITER ;
 
--- 7. Sample data (from Phase B) ----------------------------------------------
+-- 7. Sample data (from Phase b) --------------------------------------------
 
--- Warehouse
+-- warehouse
 INSERT INTO Warehouse (WarehouseID, Location) VALUES
     (1, 'San Jose, CA'),
     (2, 'Los Angeles, CA'),
