@@ -53,7 +53,7 @@ CREATE TABLE Purchases (
     MembershipID  INT NOT NULL,
     Date          DATE NOT NULL,
     Total         DECIMAL(10, 2) NOT NULL CHECK (Total >= 0),
-    FOREIGN KEY (MembershipID) REFERENCES Customer(MembershipID)
+    FOREIGN KEY (MembershipID) REFERENCES Customer(MembershipID) ON DELETE CASCADE
 );
 
 -- WarehouseItem
@@ -78,7 +78,7 @@ CREATE TABLE TransactionLineItem (
      ON UPDATE CASCADE
 );
 
--- Manages (Warehouse ↔ Item stock)
+-- Manages (Warehouse <-> Item stock)
 CREATE TABLE Manages (
     WarehouseID INT NOT NULL,
     ItemID      INT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE Manages (
 
 -- 3. Indexes -----------------------------------------------------------
 
--- Index on Employee for fast lookup by (Name, Role)
+-- Index on Employee for lookup by Name, Role
 CREATE INDEX emp_idx ON Employee (Name, Role);
 
 -- 4. Trigger (from Phase B) -----------------------------------------------
@@ -100,7 +100,7 @@ CREATE TRIGGER update_stock_after_purchase
     AFTER INSERT ON TransactionLineItem
     FOR EACH ROW
 BEGIN
-    -- Simple stock decrement: subtract from one matching row.
+    -- stock decrement: subtract from one matching row
     UPDATE Manages
     SET Stock = Stock - NEW.Quantity
     WHERE ItemID = NEW.ItemID
@@ -108,9 +108,9 @@ BEGIN
 END//
 DELIMITER ;
 
--- 5. View (Phase C Part 6 -------------------------------------------------
+-- 5. View (Part 6 -------------------------------------------------
 
--- Shows each customer, how many transactions they have, and total spent.
+-- Shows customer, how many transactions they have,  total spent.
 CREATE OR REPLACE VIEW CustomerPurchaseSummary AS
 SELECT
     c.MembershipID,
@@ -121,7 +121,7 @@ FROM Customer c
          LEFT JOIN Purchases p ON c.MembershipID = p.MembershipID
 GROUP BY c.MembershipID, c.Name;
 
--- 6. Stored Procedure (Phase C Part 6) -------------------------------------
+-- 6. Stored Procedure (Part 6) -------------------------------------
 
 DELIMITER //
 CREATE PROCEDURE AddNewCustomer(
@@ -137,7 +137,7 @@ VALUES (p_MembershipID, p_Name, p_DateOfBirth, p_Email, p_Phone);
 END//
 DELIMITER ;
 
--- 7. Sample data (from Phase b) --------------------------------------------
+-- 7. Sample data --------------------------------------------
 
 -- warehouse
 INSERT INTO Warehouse (WarehouseID, Location) VALUES
@@ -161,7 +161,7 @@ INSERT INTO Customer (MembershipID, Name, DateOfBirth, Email, Phone) VALUES
     (4, 'David Thompson','1978-01-09', 'david.thompson@example.com','555-456-7890'),
     (5, 'Emily Davis',   '1995-04-09', 'emily.davis@example.com',   '555-567-8901');
 
--- Purchases (explicit IDs; AUTO_INCREMENT will continue from max+1)
+-- Purchases
 INSERT INTO Purchases (TransactionID, MembershipID, Date, Total) VALUES
         (1001, 1, '2025-01-12', 59.99),
         (1002, 1, '2025-02-03', 42.50),
