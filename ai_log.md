@@ -1,7 +1,7 @@
 # AI Collaboration Log - CS157A PHASE C
 **Project:** Warehouse Console JDBC App with SQL database  
 **AI Tool:** Chatgpt(5.1)  
-**Info:** This document includes all prompts sent to AI in order to assist with the completion of PHASE C and the code or help the AI sent back. Additonally, the document also includes what we used from the AI's generation
+**Info:** This document includes all prompts sent to AI in order to assist with the completion of PHASE C and the code or help the AI sent back. Additonally, the document also includes what we used from the AI's response and generation.
 
 ## Prompt #1:
 hey, we have a cs157a final project in java + mysql
