@@ -1,6 +1,6 @@
 # AI Collaboration Log - CS157A PHASE C
-**Project:** Warehouse Console JDBC App with SQL database
-**AI Tool:** Chatgpt(5.1)
+**Project:** Warehouse Console JDBC App with SQL database  
+**AI Tool:** Chatgpt(5.1)  
 **Info:** This document includes all prompts sent to AI in order to assist with the completion of PHASE C and the code or help the AI sent back. Additonally, the document also includes what we used from the AI's generation
 
 ## Prompt #1:
@@ -48,7 +48,7 @@ public static void main(String[] args) {
 What we used from AI #1:
 Used the overall structure (loading app.properties, one Connection + Scanner, while loop + switch menu), then filled in our own menu options and SQL for our warehouse schema.
 
-##Prompt #2: 
+## Prompt #2: 
 i keep repeating the same scanner code and jdbc code everywhere  
 can you help me make helper methods for:  
 - read int with validation  
