@@ -1,0 +1,10 @@
+Roles:
+
+Tyler - Code, documentation, testing
+Rustico - Code, Java structure, testing
+Bineet - Code, organization, handled team coordination
+Fawaaz - Code, testing, validation, AI log
+
+Overall, we worked well together and balanced our strengths well. However, there were challenges at the beginning regarding
+coordinating work and meeting properly. However, we resolved this by dividing tasks clearly, committing to meetings,
+and reviewing each others work. After this, our communication was consistent, and we worked well together to create the project
