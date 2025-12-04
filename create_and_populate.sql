@@ -1,5 +1,5 @@
 -- create_and_populate.sql
--- CS157A Final Project - Warehouse / Customer / Purchasing Domain
+-- CS157A Final Project
 
 -- 1. Clean up old objects ----------------------------------------------------
 DROP DATABASE IF EXISTS cs157a_warehouse;
