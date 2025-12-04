@@ -97,8 +97,7 @@ public class Main {
     // ---------- Menu actions -------------------------------------------------
 
     private static void listCustomers(Connection conn) {
-        String sql = "SELECT MembershipID, Name, DateOfBirth, Email, Phone " +
-        "FROM Customer ORDER BY MembershipID";
+        String sql = "SELECT MembershipID, Name, DateOfBirth, Email, Phone " + "FROM Customer ORDER BY MembershipID";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             printResultSet(rs);
@@ -114,8 +113,7 @@ public class Main {
         String email = readNonEmpty(scanner, "Enter email: ");
         String phone = readNonEmpty(scanner, "Enter phone: ");
 
-        String sql = "INSERT INTO Customer (MembershipID, Name, DateOfBirth, Email, Phone) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Customer (MembershipID, Name, DateOfBirth, Email, Phone) " +  "VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, membershipId);
