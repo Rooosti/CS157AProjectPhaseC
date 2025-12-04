@@ -155,7 +155,6 @@ public class Main {
 
     private static void deleteCustomer(Connection conn, Scanner scanner) {
         int membershipId = readInt(scanner, "Enter membership ID to delete: ");
-        System.out.println("Warning: delete will fail if the customer has existing purchases.");
 
         String sql = "DELETE FROM Customer WHERE MembershipID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -167,11 +166,7 @@ public class Main {
                 System.out.println("Deleted " + rows + " customer(s).");
             }
         } catch (SQLException e) {
-            if (e.getSQLState() != null && e.getSQLState().startsWith("23")) {
-                System.out.println("Cannot delete due to foreign key constraint (existing purchases).");
-            } else {
-                System.out.println("Error deleting customer: " + e.getMessage());
-            }
+            System.out.println("Error deleting customer: " + e.getMessage());
         }
     }
 
