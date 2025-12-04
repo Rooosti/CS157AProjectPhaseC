@@ -139,84 +139,28 @@ We added readInt, readNonEmpty, and readDate to our Main class so all user input
 We also added exists, queryForInt, and queryForBigDecimal and used them mainly inside createPurchaseTransaction to check if customers/items exist, to sum stock from Manages, and to look up UnitPrice from WarehouseItem.
 
 ## Prompt #3:
-i have select queries for customers, purchases, and warehouse stock  
-right now i just print them with println and it looks messy  
-
-can you help me write a single method `printResultSet(ResultSet rs)` that prints a table with column headers and auto-sized columns, and works for any select query?
+when i insert a customer with a membership id or email that already exists, i get a huge sqlexception dump. Is there a way to detect constraint violations in mysql (like duplicate key) and just print something like "constraint violation (duplicate id or email)" instead of the whole error?
 
 ## AI Response #3:
 
-AI suggested creating a generic printResultSet method that uses ResultSetMetaData and computes column widths:
+AI explained that in MySQL, many constraint violations (like duplicate key, foreign key errors, etc.) use SQLState codes that start with `"23"`.
 
-```
-private static void printResultSet(ResultSet rs) throws SQLException {
-    ResultSetMetaData meta = rs.getMetaData();
-    int columnCount = meta.getColumnCount();
+It suggested handling this in the `catch (SQLException e)` block by checking the SQLState and printing a shorter, user-friendly message, for example:
 
-    List<String[]> rows = new ArrayList<>();
-    int[] colWidths = new int[columnCount];
-
-    // initialize with header labels
-    for (int i = 1; i <= columnCount; i++) {
-        String label = meta.getColumnLabel(i);
-        colWidths[i - 1] = label.length();
-    }
-
-    // read all rows and update widths
-    while (rs.next()) {
-        String[] row = new String[columnCount];
-        for (int i = 1; i <= columnCount; i++) {
-            String val = rs.getString(i);
-            if (val == null) val = "NULL";
-            row[i - 1] = val;
-            if (val.length() > colWidths[i - 1]) {
-                colWidths[i - 1] = val.length();
-            }
-        }
-        rows.add(row);
-    }
-
-    if (rows.isEmpty()) {
-        System.out.println("(no rows)");
-        return;
-    }
-
-    // build format string
-    StringBuilder fmt = new StringBuilder("| ");
-    for (int i = 0; i < columnCount; i++) {
-        fmt.append("%-").append(colWidths[i]).append("s");
-        if (i < columnCount - 1) {
-            fmt.append(" | ");
-        } else {
-            fmt.append(" |");
-        }
-    }
-    String formatStr = fmt.toString();
-
-    // header row
-    String[] headers = new String[columnCount];
-    for (int i = 1; i <= columnCount; i++) {
-        headers[i - 1] = meta.getColumnLabel(i);
-    }
-    System.out.println(String.format(formatStr, (Object[]) headers));
-
-    // separator
-    StringBuilder sep = new StringBuilder("|");
-    for (int w : colWidths) {
-        sep.append("-".repeat(w + 2)).append("|");
-    }
-    System.out.println(sep.toString());
-
-    // data rows
-    for (String[] row : rows) {
-        System.out.println(String.format(formatStr, (Object[]) row));
+```java
+} catch (SQLException e) {
+    String state = e.getSQLState();
+    if (state != null && state.startsWith("23")) {
+        System.out.println("Constraint violation (e.g., duplicate ID or email).");
+    } else {
+        System.out.println("Error inserting customer: " + e.getMessage());
     }
 }
 ```
 What we used from AI #3:
-
-We added this printResultSet method to our Main class (with only tiny formatting tweaks).
-We now use it in listCustomers, listPurchases, and viewWarehouseStock so all of our SELECT queries print as a clean table in the console instead of a bunch of separate printlns.
+We added this style of error handling to our addCustomer method.
+When a duplicate MembershipID or Email is inserted, we now show a clear message
+"Constraint violation (duplicate ID or email)." instead of printing a full stack trace, which satisfies the project’s input validation and error handling requirement.
 
 ## Prompt #4:
 what does mean in database managment "Create at least one workflow that uses both COMMIT and ROLLBACK to ensure atomicity"  
